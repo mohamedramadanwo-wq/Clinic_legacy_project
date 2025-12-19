@@ -1,0 +1,20 @@
+<!doctype html><html><head><title>Clinic Legacy</title></head><body>
+<h1>Clinic Dashboard</h1>
+<div style="border:1px solid #ccc;padding:10px;margin:10px;">
+<h2>Patients</h2>
+<ul>
+{% for p in patients %}
+<li>{{p.id}} - {{p.name}} ({{p.age}}) - <a href="/patients/{{p.id}}/edit">edit</a></li>
+{% endfor %}
+</ul>
+</div>
+<div style="border:1px solid #ccc;padding:10px;margin:10px;">
+<h2>Appointments</h2>
+<ul>
+{% for a in appointments %}
+<li>{{a.id}} - {{a.patient.name}} on {{a.date}} - {{a.description}}</li>
+{% endfor %}
+</ul>
+</div>
+<p><a href="/patients">Manage Patients</a> | <a href="/appointments">Manage Appointments</a></p>
+</body></html>

@@ -1,0 +1,15 @@
+<!doctype html><html><head><title>Patients</title></head><body>
+<h1>Patients</h1>
+<p><a href="/patients/add">Add patient</a> | <a href="/">Dashboard</a></p>
+<table border="1" cellpadding="6"><tr><th>ID</th><th>Name</th><th>Age</th><th>Phone</th><th>Actions</th></tr>
+{% for p in patients %}
+<tr>
+<td>{{p.id}}</td>
+<td>{{p.name}}</td>
+<td>{{p.age}}</td>
+<td>{{p.phone}}</td>
+<td><a href="/patients/{{p.id}}/edit">Edit</a> | <a href="/del_patient/{{p.id}}">Delete</a></td>
+</tr>
+{% endfor %}
+</table>
+</body></html>

@@ -1,0 +1,9 @@
+<!doctype html><html><head><title>Create Appointment</title></head><body>
+<h1>Create Appointment</h1>
+<form method="post">
+<label>Patient: <select name="patient_id">{% for p in patients %}<option value="{{p.id}}">{{p.id}} - {{p.name}}</option>{% endfor %}</select></label><br/>
+<label>Date: <input name="date" placeholder="YYYY-MM-DD"/></label><br/>
+<label>Description: <input name="description"/></label><br/>
+<button type="submit">Create</button>
+</form>
+</body></html>

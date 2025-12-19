@@ -1,0 +1,9 @@
+<!doctype html><html><head><title>Appointments</title></head><body>
+<h1>Appointments</h1>
+<p><a href="/appointments/create">Create Appointment</a> | <a href="/">Dashboard</a></p>
+<ul>
+{% for a in appointments %}
+<li>{{a.id}} - {{a.patient.name}} ({{a.patient.id}}) on {{a.date}} - {{a.description}}</li>
+{% endfor %}
+</ul>
+</body></html>
