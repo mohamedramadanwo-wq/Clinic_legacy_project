@@ -368,3 +368,122 @@ def list_appointments():
 - **Empty state:** Shows "No appointments found" when no results
 
 ---
+
+## Phase 6: Add Form Validation (Sprint 2 - T-2.3)
+
+**Date:** 2025-12-22  
+**Commit:** `feat: Add form validation with flash messages`  
+**Evolution Feature:** US-06 - Error Messages for Invalid Forms
+
+### Requirement
+> As a user, I want to see error messages when I submit empty forms so that I don't create invalid records.
+
+### Implementation
+
+#### Flask Configuration
+```python
+from flask import flash
+app.secret_key = 'clinic-legacy-secret-key-2025'  # Required for flash messages
+```
+
+#### Validation in Routes
+```python
+@app.route('/patients/add', methods=['GET', 'POST'])
+def patient_add():
+    if request.method == 'POST':
+        name = request.form.get('name', '').strip()
+        age = request.form.get('age', '').strip()
+        phone = request.form.get('phone', '').strip()
+        
+        # Validation
+        errors = []
+        if not name:
+            errors.append('Name is required')
+        if not age:
+            errors.append('Age is required')
+        elif not age.isdigit() or int(age) < 0 or int(age) > 150:
+            errors.append('Age must be a valid number between 0 and 150')
+        if not phone:
+            errors.append('Phone is required')
+        
+        if errors:
+            for error in errors:
+                flash(error, 'error')
+            return render_template('patient_add.html', 
+                                  name=name, age=age, phone=phone)
+        
+        clinic.add_patient(name, age, phone)
+        flash('Patient added successfully!', 'success')
+        return redirect(url_for('list_patients'))
+```
+
+#### Flash Messages in Templates
+```html
+<style>
+    .flash-error { color: #721c24; background: #f8d7da; padding: 10px; border-radius: 4px; }
+    .flash-success { color: #155724; background: #d4edda; padding: 10px; border-radius: 4px; }
+</style>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="flash-{{category}}">{{message}}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+```
+
+### Files Changed
+| File | Change |
+|------|--------|
+| `app.py` | Added `flash` import, secret key, validation logic in all form routes |
+| `templates/patient_add.html` | Added flash message display, form styling, required indicators |
+| `templates/patient_edit.html` | Added flash message display, form styling |
+| `templates/patients.html` | Added flash message display, delete confirmation |
+| `templates/appointment_create.html` | Added flash message display, validation feedback |
+
+### Validation Rules
+| Field | Rules |
+|-------|-------|
+| Name | Required, non-empty |
+| Age | Required, numeric, 0-150 |
+| Phone | Required, non-empty |
+| Date | Required |
+| Description | Required |
+| Patient (appointment) | Required, must exist |
+
+### Features Added
+- **Error messages:** Red-styled alerts for validation errors
+- **Success messages:** Green-styled alerts for successful operations
+- **Form value preservation:** Values retained after validation errors
+- **Delete confirmation:** JavaScript confirm dialog before deletion
+- **Required field indicators:** Red asterisks on required fields
+- **HTML5 validation:** `required` and `type="number"` attributes as first line of defense
+
+---
+
+## Summary: Refactoring Complete
+
+### Commits Made
+| # | Commit Message | Phase |
+|---|---------------|-------|
+| 1 | `feat: Create Patient and Appointment model classes` | S1-T1.1 |
+| 2 | `refactor: Consolidate duplicate patient functions` | S1-T1.2 |
+| 3 | `refactor: Extract ClinicRepository from app.py` | S1-T1.3 |
+| 4 | `refactor: Normalize appointments to use patient_id` | S2-T2.1 |
+| 5 | `feat: Add appointment search by date and patient name` | S2-T2.2 |
+| 6 | `feat: Add form validation with flash messages` | S2-T2.3 |
+
+### Code Smells Fixed
+- ✅ Duplicate Code
+- ✅ Primitive Obsession
+- ✅ God Object / Low Cohesion
+- ✅ Feature Envy / High Coupling
+- ✅ Shotgun Surgery
+- ✅ Long Method
+
+### Evolution Features Implemented
+- ✅ US-05: Appointment search by date and patient name
+- ✅ US-06: Form validation with error messages
+
+---

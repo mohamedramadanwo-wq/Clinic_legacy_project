@@ -1,9 +1,92 @@
-<!doctype html><html><head><title>Create Appointment</title></head><body>
-<h1>Create Appointment</h1>
-<form method="post">
-<label>Patient: <select name="patient_id">{% for p in patients %}<option value="{{p.id}}">{{p.id}} - {{p.name}}</option>{% endfor %}</select></label><br/>
-<label>Date: <input name="date" placeholder="YYYY-MM-DD"/></label><br/>
-<label>Description: <input name="description"/></label><br/>
-<button type="submit">Create</button>
-</form>
-</body></html>
+<!doctype html>
+<html>
+
+<head>
+    <title>Create Appointment</title>
+    <style>
+        .flash-messages {
+            margin: 10px 0;
+        }
+
+        .flash-error {
+            color: #721c24;
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+
+        .flash-success {
+            color: #155724;
+            background: #d4edda;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        form input,
+        form select {
+            padding: 5px;
+            width: 200px;
+        }
+
+        form button {
+            margin-top: 15px;
+            padding: 8px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background: #0056b3;
+        }
+
+        .required {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Create Appointment</h1>
+    <p><a href="/appointments">Back to Appointments</a> | <a href="/">Dashboard</a></p>
+
+    <!-- Flash Messages -->
+    <div class="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="flash-{{category}}">{{message}}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <form method="post">
+        <label>Patient: <span class="required">*</span>
+            <select name="patient_id" required>
+                <option value="">-- Select Patient --</option>
+                {% for p in patients %}
+                <option value="{{p.id}}" {% if selected_patient==p.id|string %}selected{% endif %}>{{p.id}} - {{p.name}}
+                </option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>Date: <span class="required">*</span>
+            <input name="date" type="date" value="{{date or ''}}" required />
+        </label>
+        <label>Description: <span class="required">*</span>
+            <input name="description" value="{{description or ''}}" required />
+        </label>
+        <button type="submit">Create Appointment</button>
+    </form>
+</body>
+
+</html>
