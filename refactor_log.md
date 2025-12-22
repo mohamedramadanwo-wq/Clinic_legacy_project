@@ -120,3 +120,95 @@ def find_patient(patient_id):
 - **Reduction:** 12 lines (-46%)
 
 ---
+
+## Phase 3: Create Repository Class (Sprint 1 - T-1.3)
+
+**Date:** 2025-12-22  
+**Commit:** `refactor: Extract ClinicRepository from app.py`  
+**Code Smell Fixed:** God Object / Low Cohesion / Feature Envy
+
+### Problem
+`app.py` was a monolithic "God Object" handling everything:
+- Web routing
+- Data storage (global lists)
+- Data manipulation logic
+- API endpoints
+
+```python
+# Before: Global state in app.py
+patients = []
+appointments = []
+_next_id = 1
+
+def add_patient(name, age, phone):
+    global _next_id
+    patient = {...}
+    patients.append(patient)
+    ...
+
+def del_patient(pid):
+    global patients, appointments
+    # Manual filtering logic mixed with route
+    newp = []
+    for p in patients:
+        if p['id'] != pid:
+            newp.append(p)
+    patients = newp
+    ...
+```
+
+### Solution
+Created `repository.py` with `ClinicRepository` class:
+
+```python
+# After: Clean separation of concerns
+class ClinicRepository:
+    def __init__(self):
+        self._patients = []
+        self._appointments = []
+        self._next_patient_id = 1
+    
+    def add_patient(self, name, age, phone):
+        """Add a new patient and return the patient dict."""
+        patient = {...}
+        self._patients.append(patient)
+        return patient
+    
+    def delete_patient(self, patient_id):
+        """Delete a patient and their appointments (cascade)."""
+        self._patients = [p for p in self._patients if p['id'] != patient_id]
+        self._appointments = [a for a in self._appointments if a['patient']['id'] != patient_id]
+
+# Global instance
+clinic = ClinicRepository()
+```
+
+Updated `app.py` to use repository:
+```python
+from repository import clinic
+
+@app.route('/del_patient/<int:pid>')
+def del_patient(pid):
+    clinic.delete_patient(pid)  # Clean, single-responsibility
+    return redirect(url_for('list_patients'))
+```
+
+### Files Changed
+| File | Change |
+|------|--------|
+| `repository.py` | **NEW** - ClinicRepository class with all data operations |
+| `app.py` | Removed global state, imports and uses `clinic` from repository |
+
+### LOC Impact
+- **app.py Before:** 121 lines
+- **app.py After:** 107 lines
+- **repository.py:** 101 lines (new, but encapsulated)
+- **Total:** Better organized, each file has single responsibility
+
+### Benefits
+- **Single Responsibility:** Routes in `app.py`, data in `repository.py`
+- **Testability:** Can unit test `ClinicRepository` independently
+- **Encapsulation:** Data access controlled through methods
+- **Maintainability:** Changes to data storage only affect `repository.py`
+
+---
