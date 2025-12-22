@@ -1,74 +1,81 @@
-<!doctype html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>Appointments</title>
-    <style>
-        .search-form {
-            margin: 15px 0;
-            padding: 10px;
-            background: #f5f5f5;
-            border-radius: 5px;
-        }
+{% block title %}Appointments - Clinic Manager{% endblock %}
 
-        .search-form input {
-            padding: 5px;
-            margin-right: 10px;
-        }
-
-        .search-form button {
-            padding: 5px 15px;
-            background: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        .search-form button:hover {
-            background: #0056b3;
-        }
-
-        .no-results {
-            color: #666;
-            font-style: italic;
-        }
-    </style>
-</head>
-
-<body>
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
     <h1>Appointments</h1>
-    <p><a href="/appointments/create">Create Appointment</a> | <a href="/">Dashboard</a></p>
+    <a href="/appointments/create" class="btn btn-success">+ New Appointment</a>
+</div>
 
-    <!-- Search Form -->
-    <div class="search-form">
-        <form method="get">
-            <input type="text" name="q" placeholder="Search by patient name" value="{{search_query}}" />
-            <input type="date" name="date" value="{{search_date}}" />
-            <button type="submit">Search</button>
-            {% if search_query or search_date %}
-            <a href="/appointments">Clear</a>
-            {% endif %}
-        </form>
-    </div>
+<!-- Search Form -->
+<div class="card mb-6">
+    <form method="get" class="search-form">
+        <input type="text" name="q" class="form-input" placeholder="Search by patient name..."
+            value="{{ search_query or '' }}">
+        <input type="date" name="date" class="form-input" style="max-width: 200px;" value="{{ search_date or '' }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+        {% if search_query or search_date %}
+        <a href="/appointments" class="btn btn-outline">Clear</a>
+        {% endif %}
+    </form>
+</div>
 
-    {% if search_query or search_date %}
-    <p>Showing results for:
-        {% if search_query %}<strong>name: "{{search_query}}"</strong>{% endif %}
-        {% if search_query and search_date %} and {% endif %}
-        {% if search_date %}<strong>date: {{search_date}}</strong>{% endif %}
-    </p>
-    {% endif %}
+<!-- Search Results Info -->
+{% if search_query or search_date %}
+<p class="text-muted mb-4">
+    Showing results for:
+    {% if search_query %}<strong>"{{ search_query }}"</strong>{% endif %}
+    {% if search_query and search_date %} on {% endif %}
+    {% if search_date %}<strong>{{ search_date }}</strong>{% endif %}
+</p>
+{% endif %}
 
+<!-- Appointments Table -->
+<div class="card">
     {% if appointments %}
-    <ul>
-        {% for a in appointments %}
-        <li>{{a.id}} - {{a.patient_name}} ({{a.patient_id}}) on {{a.date}} - {{a.description}}</li>
-        {% endfor %}
-    </ul>
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Patient</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in appointments %}
+                <tr>
+                    <td><span class="badge badge-primary">#{{ a.id }}</span></td>
+                    <td>
+                        <strong>{{ a.patient_name }}</strong>
+                        <div class="text-small text-muted">Patient ID: {{ a.patient_id }}</div>
+                    </td>
+                    <td>{{ a.date }}</td>
+                    <td>{{ a.description }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% else %}
-    <p class="no-results">No appointments found.</p>
+    <div class="empty-state">
+        <div class="empty-state-icon">📅</div>
+        <p class="empty-state-text">
+            {% if search_query or search_date %}
+            No appointments found matching your search
+            {% else %}
+            No appointments yet
+            {% endif %}
+        </p>
+        {% if not search_query and not search_date %}
+        <a href="/appointments/create" class="btn btn-success">Create First Appointment</a>
+        {% else %}
+        <a href="/appointments" class="btn btn-outline">Clear Search</a>
+        {% endif %}
+    </div>
     {% endif %}
-
-</body>
-
-</html>
+</div>
+{% endblock %}
