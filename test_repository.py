@@ -1,6 +1,5 @@
 """
 Unit Tests for Clinic Legacy Application
-Tests for the ClinicRepository class (5-8 functions as per assignment requirement).
 
 Run with: pytest test_repository.py -v
 """
