@@ -66,3 +66,57 @@ class Appointment:
 
 ---
 
+## Phase 2: Remove Duplicate Functions (Sprint 1 - T-1.2)
+
+**Date:** 2025-12-22  
+**Commit:** `refactor: Consolidate duplicate patient functions`  
+**Code Smell Fixed:** Duplicate Code
+
+### Problem
+The codebase contained two pairs of identical functions:
+
+```python
+# DUPLICATE PAIR 1: Creating patients
+def add_patient_record(name, age, phone):    # Used in patient_add route
+    ...
+def create_patient(name, age, phone):        # Unused duplicate
+    ...
+
+# DUPLICATE PAIR 2: Finding patients  
+def find_patient(p_id):                      # Used in appointment_create
+    ...
+def get_patient_by_id(pid):                  # Used in patient_edit
+    ...
+```
+
+### Solution
+Consolidated to single, well-documented functions:
+
+```python
+def add_patient(name, age, phone):
+    """Add a new patient to the system. (Consolidated)"""
+    global _next_id
+    patient = {'id': _next_id, 'name': name, 'age': age, 'phone': phone, 'notes': ''}
+    patients.append(patient)
+    _next_id += 1
+    return patient
+
+def find_patient(patient_id):
+    """Find a patient by ID. (Consolidated)"""
+    for p in patients:
+        if p['id'] == patient_id:
+            return p
+    return None
+```
+
+### Files Changed
+| File | Change |
+|------|--------|
+| `app.py` | Removed `create_patient()` and `get_patient_by_id()`, updated all references |
+
+### LOC Impact
+- **Before:** 26 lines (4 functions)
+- **After:** 14 lines (2 functions)
+- **Reduction:** 12 lines (-46%)
+
+---

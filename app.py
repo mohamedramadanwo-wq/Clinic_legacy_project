@@ -6,31 +6,24 @@ patients = []
 appointments = []
 _next_id = 1
 
-def add_patient_record(name, age, phone):
+# ========================================
+# Helper Functions (Consolidated)
+# ========================================
+
+def add_patient(name, age, phone):
+    """Add a new patient to the system. (Consolidated from add_patient_record and create_patient)"""
     global _next_id
     patient = {'id': _next_id, 'name': name, 'age': age, 'phone': phone, 'notes': ''}
     patients.append(patient)
     _next_id += 1
     return patient
 
-def create_patient(name, age, phone):
-    global _next_id
-    p = {'id': _next_id, 'name': name, 'age': age, 'phone': phone, 'notes': ''}
-    patients.append(p)
-    _next_id += 1
-    return p
 
-
-def find_patient(p_id):
+def find_patient(patient_id):
+    """Find a patient by ID. (Consolidated from find_patient and get_patient_by_id)"""
     for p in patients:
-        if p['id'] == p_id:
+        if p['id'] == patient_id:
             return p
-    return None
-
-def get_patient_by_id(pid): 
-    for patient in patients:
-        if patient['id'] == pid:
-            return patient
     return None
 
 
@@ -49,13 +42,13 @@ def patient_add():
         age = request.form.get('age')
         phone = request.form.get('phone')
         # no validation, inconsistent types
-        add_patient_record(name, age, phone)
+        add_patient(name, age, phone)
         return redirect(url_for('list_patients'))
     return render_template('patient_add.html')
 
 @app.route('/patients/<int:pid>/edit', methods=['GET','POST'])
 def patient_edit(pid):
-    p = get_patient_by_id(pid)
+    p = find_patient(pid)
     if p is None:
         return "Not Found", 404
     if request.method == 'POST':
@@ -120,8 +113,8 @@ def messy_maintenance_function(x):
     return len(patients) + len(appointments)
 
 
-add_patient_record('Ahmed Ali', '30', '091-111-222')
-add_patient_record('Sara Omar', '25', '092-222-333')
+add_patient('Ahmed Ali', '30', '091-111-222')
+add_patient('Sara Omar', '25', '092-222-333')
 appointments.append({'id': 1, 'patient': patients[0], 'date': '2025-10-22', 'description': 'General Checkup'})
 
 if __name__ == '__main__':
