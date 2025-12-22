@@ -212,3 +212,70 @@ def del_patient(pid):
 - **Maintainability:** Changes to data storage only affect `repository.py`
 
 ---
+
+## Phase 4: Normalize Appointments (Sprint 2 - T-2.1)
+
+**Date:** 2025-12-22  
+**Commit:** `refactor: Normalize appointments to use patient_id`  
+**Code Smell Fixed:** Shotgun Surgery / Tight Data Coupling
+
+### Problem
+Appointments stored a **copy** of the entire patient object:
+
+```python
+# Before: Storing full patient object
+appointment = {
+    'id': 1,
+    'patient': {'id': 1, 'name': 'Ahmed', 'age': '30', 'phone': '091-111-222'},
+    'date': '2025-10-22',
+    'description': 'Checkup'
+}
+```
+
+**Issues:**
+- If patient name is updated, the appointment still shows old name
+- Data duplication (patient data stored in multiple places)
+- Deleting patients requires checking `a['patient']['id']` (fragile)
+
+### Solution
+Store only `patient_id` and look up patient details when needed:
+
+```python
+# After: Storing only patient_id (normalized)
+appointment = {
+    'id': 1,
+    'patient_id': 1,  # Reference only
+    'date': '2025-10-22',
+    'description': 'Checkup'
+}
+
+# New helper method enriches data for display
+def get_appointments_with_patient_names(self):
+    enriched = []
+    for a in self._appointments:
+        patient = self.find_patient(a['patient_id'])
+        enriched.append({
+            'id': a['id'],
+            'patient_id': a['patient_id'],
+            'patient_name': patient['name'] if patient else 'Unknown',
+            'date': a['date'],
+            'description': a['description']
+        })
+    return enriched
+```
+
+### Files Changed
+| File | Change |
+|------|--------|
+| `repository.py` | Changed `add_appointment()` to use `patient_id`, added `get_appointments_with_patient_names()` |
+| `app.py` | Updated routes to pass `patient_id` and use enriched appointment data |
+| `templates/index.html` | Changed `{{a.patient.name}}` to `{{a.patient_name}}` |
+| `templates/appointments.html` | Changed `{{a.patient.name}}` to `{{a.patient_name}}` |
+
+### Benefits
+- **Data Consistency:** Patient updates automatically reflect in appointments
+- **Reduced Coupling:** Appointments only depend on patient ID
+- **Simpler Deletion:** Can filter by `a['patient_id'] != patient_id`
+- **Single Source of Truth:** Patient data lives only in patients list
+
+---

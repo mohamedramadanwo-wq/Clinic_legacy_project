@@ -1,6 +1,7 @@
 """
 Repository module for the Clinic application.
 Created to fix God Object/Low Cohesion code smell - extracting data management from routes.
+Phase 4: Normalized appointments to store patient_id instead of full patient object.
 """
 
 
@@ -56,17 +57,18 @@ class ClinicRepository:
     def delete_patient(self, patient_id):
         """Delete a patient and their appointments (cascade delete)."""
         self._patients = [p for p in self._patients if p['id'] != patient_id]
-        self._appointments = [a for a in self._appointments if a['patient']['id'] != patient_id]
+        # Now uses patient_id instead of patient['id']
+        self._appointments = [a for a in self._appointments if a['patient_id'] != patient_id]
     
     # ========================================
     # Appointment Operations
     # ========================================
     
-    def add_appointment(self, patient, date, description):
-        """Add a new appointment and return it."""
+    def add_appointment(self, patient_id, date, description):
+        """Add a new appointment storing only patient_id (normalized)."""
         appointment = {
             'id': self._next_appointment_id,
-            'patient': patient,  # Still stores full patient object (will be fixed in Phase 4)
+            'patient_id': patient_id,  # Fixed: Now stores ID only, not full object
             'date': date,
             'description': description
         }
@@ -78,12 +80,26 @@ class ClinicRepository:
         """Return all appointments."""
         return self._appointments
     
+    def get_appointments_with_patient_names(self):
+        """Return appointments enriched with patient names for display."""
+        enriched = []
+        for a in self._appointments:
+            patient = self.find_patient(a['patient_id'])
+            enriched.append({
+                'id': a['id'],
+                'patient_id': a['patient_id'],
+                'patient_name': patient['name'] if patient else 'Unknown',
+                'date': a['date'],
+                'description': a['description']
+            })
+        return enriched
+    
     def get_appointments_as_api_format(self):
         """Return appointments formatted for API response."""
         return [
             {
                 'id': a['id'],
-                'patient_id': a['patient']['id'],
+                'patient_id': a['patient_id'],
                 'date': a['date'],
                 'description': a['description']
             }
@@ -95,10 +111,8 @@ class ClinicRepository:
 clinic = ClinicRepository()
 
 # Seed initial data
-clinic.add_patient('Ahmed Ali', '30', '091-111-222')
-clinic.add_patient('Sara Omar', '25', '092-222-333')
+patient1 = clinic.add_patient('Ahmed Ali', '30', '091-111-222')
+patient2 = clinic.add_patient('Sara Omar', '25', '092-222-333')
 
-# Add initial appointment
-patients = clinic.get_all_patients()
-if patients:
-    clinic.add_appointment(patients[0], '2025-10-22', 'General Checkup')
+# Add initial appointment using patient_id
+clinic.add_appointment(patient1['id'], '2025-10-22', 'General Checkup')

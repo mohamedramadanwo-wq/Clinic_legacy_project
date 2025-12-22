@@ -3,7 +3,7 @@
 <p><a href="/appointments/create">Create Appointment</a> | <a href="/">Dashboard</a></p>
 <ul>
 {% for a in appointments %}
-<li>{{a.id}} - {{a.patient.name}} ({{a.patient.id}}) on {{a.date}} - {{a.description}}</li>
+<li>{{a.id}} - {{a.patient_name}} ({{a.patient_id}}) on {{a.date}} - {{a.description}}</li>
 {% endfor %}
 </ul>
 </body></html>

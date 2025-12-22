@@ -17,7 +17,7 @@ def index():
     """Dashboard showing patients and appointments."""
     return render_template('index.html', 
                           patients=clinic.get_all_patients(), 
-                          appointments=clinic.get_all_appointments())
+                          appointments=clinic.get_appointments_with_patient_names())
 
 
 @app.route('/patients')
@@ -67,7 +67,8 @@ def del_patient(pid):
 @app.route('/appointments')
 def list_appointments():
     """List all appointments."""
-    return render_template('appointments.html', appointments=clinic.get_all_appointments())
+    return render_template('appointments.html', 
+                          appointments=clinic.get_appointments_with_patient_names())
 
 
 @app.route('/appointments/create', methods=['GET', 'POST'])
@@ -82,7 +83,7 @@ def appointment_create():
         if not patient:
             return "Patient not found", 400
         
-        clinic.add_appointment(patient, date, description)
+        clinic.add_appointment(pid, date, description)  # Now uses patient_id
         return redirect(url_for('list_appointments'))
     return render_template('appointment_create.html', patients=clinic.get_all_patients())
 
