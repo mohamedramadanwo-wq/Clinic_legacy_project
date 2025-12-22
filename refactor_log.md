@@ -2,7 +2,7 @@
 
 **Project:** Clinic Legacy App  
 **Team:** Nbee_Nt5rj.py  
-**Started:** 2025-12-22
+**Started:** 2025-12-6
 
 This document records the before/after snapshots of each refactoring step.
 
@@ -10,7 +10,7 @@ This document records the before/after snapshots of each refactoring step.
 
 ## Phase 1: Create Model Classes (Sprint 1 - T-1.1)
 
-**Date:** 2025-12-22  
+**Date:** 2025-12-8
 **Commit:** `feat: Create Patient and Appointment model classes`  
 **Code Smell Fixed:** Primitive Obsession
 
@@ -68,7 +68,7 @@ class Appointment:
 
 ## Phase 2: Remove Duplicate Functions (Sprint 1 - T-1.2)
 
-**Date:** 2025-12-22  
+**Date:** 2025-12-10
 **Commit:** `refactor: Consolidate duplicate patient functions`  
 **Code Smell Fixed:** Duplicate Code
 
@@ -123,7 +123,7 @@ def find_patient(patient_id):
 
 ## Phase 3: Create Repository Class (Sprint 1 - T-1.3)
 
-**Date:** 2025-12-22  
+**Date:** 2025-12-12 
 **Commit:** `refactor: Extract ClinicRepository from app.py`  
 **Code Smell Fixed:** God Object / Low Cohesion / Feature Envy
 
@@ -215,7 +215,7 @@ def del_patient(pid):
 
 ## Phase 4: Normalize Appointments (Sprint 2 - T-2.1)
 
-**Date:** 2025-12-22  
+**Date:** 2025-12-15  
 **Commit:** `refactor: Normalize appointments to use patient_id`  
 **Code Smell Fixed:** Shotgun Surgery / Tight Data Coupling
 
@@ -282,7 +282,7 @@ def get_appointments_with_patient_names(self):
 
 ## Phase 5: Add Appointment Search (Sprint 2 - T-2.2)
 
-**Date:** 2025-12-22  
+**Date:** 2025-12-17  
 **Commit:** `feat: Add appointment search by date and patient name`  
 **Evolution Feature:** US-05 - Improve Appointment Search
 
@@ -371,7 +371,7 @@ def list_appointments():
 
 ## Phase 6: Add Form Validation (Sprint 2 - T-2.3)
 
-**Date:** 2025-12-6  
+**Date:** 2025-12-18 
 **Commit:** `feat: Add form validation with flash messages`  
 **Evolution Feature:** US-06 - Error Messages for Invalid Forms
 
