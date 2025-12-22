@@ -66,9 +66,21 @@ def del_patient(pid):
 
 @app.route('/appointments')
 def list_appointments():
-    """List all appointments."""
+    """List all appointments with optional search."""
+    search_query = request.args.get('q', '').strip()
+    search_date = request.args.get('date', '').strip()
+    
+    if search_query or search_date:
+        # Use search if filters provided
+        appointments = clinic.search_appointments(query=search_query, date=search_date)
+    else:
+        # Return all appointments
+        appointments = clinic.get_appointments_with_patient_names()
+    
     return render_template('appointments.html', 
-                          appointments=clinic.get_appointments_with_patient_names())
+                          appointments=appointments,
+                          search_query=search_query,
+                          search_date=search_date)
 
 
 @app.route('/appointments/create', methods=['GET', 'POST'])

@@ -279,3 +279,92 @@ def get_appointments_with_patient_names(self):
 - **Single Source of Truth:** Patient data lives only in patients list
 
 ---
+
+## Phase 5: Add Appointment Search (Sprint 2 - T-2.2)
+
+**Date:** 2025-12-22  
+**Commit:** `feat: Add appointment search by date and patient name`  
+**Evolution Feature:** US-05 - Improve Appointment Search
+
+### Requirement
+> As a user, I want to search for appointments by date or patient name so I can find records quickly.
+
+### Implementation
+
+#### New Repository Method
+```python
+def search_appointments(self, query=None, date=None):
+    """
+    Search appointments by patient name and/or date.
+    
+    Args:
+        query: Search string to match against patient name (case-insensitive)
+        date: Date string to match exactly (YYYY-MM-DD format)
+    
+    Returns:
+        List of matching appointments enriched with patient names
+    """
+    results = self._appointments
+    
+    # Filter by date if provided
+    if date:
+        results = [a for a in results if a['date'] == date]
+    
+    # Filter by patient name if provided
+    if query:
+        query_lower = query.lower()
+        filtered = []
+        for a in results:
+            patient = self.find_patient(a['patient_id'])
+            if patient and query_lower in patient['name'].lower():
+                filtered.append(a)
+        results = filtered
+    
+    return self.get_appointments_with_patient_names(results)
+```
+
+#### Updated Route
+```python
+@app.route('/appointments')
+def list_appointments():
+    """List all appointments with optional search."""
+    search_query = request.args.get('q', '').strip()
+    search_date = request.args.get('date', '').strip()
+    
+    if search_query or search_date:
+        appointments = clinic.search_appointments(query=search_query, date=search_date)
+    else:
+        appointments = clinic.get_appointments_with_patient_names()
+    
+    return render_template('appointments.html', 
+                          appointments=appointments,
+                          search_query=search_query,
+                          search_date=search_date)
+```
+
+#### Search Form (appointments.html)
+```html
+<div class="search-form">
+    <form method="get">
+        <input type="text" name="q" placeholder="Search by patient name" value="{{search_query}}"/>
+        <input type="date" name="date" value="{{search_date}}"/>
+        <button type="submit">Search</button>
+    </form>
+</div>
+```
+
+### Files Changed
+| File | Change |
+|------|--------|
+| `repository.py` | Added `search_appointments()` method |
+| `app.py` | Updated `/appointments` route to handle search parameters |
+| `templates/appointments.html` | Added search form with name and date inputs |
+
+### Features
+- **Search by patient name:** Case-insensitive substring matching
+- **Search by date:** Exact date matching (YYYY-MM-DD)
+- **Combined search:** Can filter by both name AND date
+- **Clear filters:** "Clear" link to reset search
+- **Empty state:** Shows "No appointments found" when no results
+
+---

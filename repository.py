@@ -80,10 +80,12 @@ class ClinicRepository:
         """Return all appointments."""
         return self._appointments
     
-    def get_appointments_with_patient_names(self):
+    def get_appointments_with_patient_names(self, appointments=None):
         """Return appointments enriched with patient names for display."""
+        if appointments is None:
+            appointments = self._appointments
         enriched = []
-        for a in self._appointments:
+        for a in appointments:
             patient = self.find_patient(a['patient_id'])
             enriched.append({
                 'id': a['id'],
@@ -93,6 +95,36 @@ class ClinicRepository:
                 'description': a['description']
             })
         return enriched
+    
+    def search_appointments(self, query=None, date=None):
+        """
+        Search appointments by patient name and/or date.
+        
+        Args:
+            query: Search string to match against patient name (case-insensitive)
+            date: Date string to match exactly (YYYY-MM-DD format)
+        
+        Returns:
+            List of matching appointments enriched with patient names
+        """
+        results = self._appointments
+        
+        # Filter by date if provided
+        if date:
+            results = [a for a in results if a['date'] == date]
+        
+        # Filter by patient name if provided
+        if query:
+            query_lower = query.lower()
+            filtered = []
+            for a in results:
+                patient = self.find_patient(a['patient_id'])
+                if patient and query_lower in patient['name'].lower():
+                    filtered.append(a)
+            results = filtered
+        
+        # Return enriched results
+        return self.get_appointments_with_patient_names(results)
     
     def get_appointments_as_api_format(self):
         """Return appointments formatted for API response."""
