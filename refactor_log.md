@@ -10,7 +10,7 @@ This document records the before/after snapshots of each refactoring step.
 
 ## Phase 1: Create Model Classes (Sprint 1 - T-1.1)
 
-**Date:** 2025-12-8
+**Date:** 2025-12-7
 **Commit:** `feat: Create Patient and Appointment model classes`  
 **Code Smell Fixed:** Primitive Obsession
 
@@ -68,7 +68,7 @@ class Appointment:
 
 ## Phase 2: Remove Duplicate Functions (Sprint 1 - T-1.2)
 
-**Date:** 2025-12-10
+**Date:** 2025-12-9
 **Commit:** `refactor: Consolidate duplicate patient functions`  
 **Code Smell Fixed:** Duplicate Code
 
@@ -123,7 +123,7 @@ def find_patient(patient_id):
 
 ## Phase 3: Create Repository Class (Sprint 1 - T-1.3)
 
-**Date:** 2025-12-12 
+**Date:** 2025-12-10 
 **Commit:** `refactor: Extract ClinicRepository from app.py`  
 **Code Smell Fixed:** God Object / Low Cohesion / Feature Envy
 
@@ -643,5 +643,3 @@ Clinic_legacy_project/
 ```
 
 ---
-
-**Refactoring Complete!** 🎉
