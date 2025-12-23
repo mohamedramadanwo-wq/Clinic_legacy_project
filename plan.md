@@ -1,6 +1,6 @@
 # Phase 3: Maintenance Plan & Schedule
 
-**Date:** 2025-12-6
+**Date:** 2025-12-06
 **Project:** Clinic Legacy App
 **Team:** Nbee_Nt5rj.py
 
@@ -27,23 +27,23 @@ We have divided the work into two 1-week sprints based on the team's capacity.
 ### Sprint 1: Refactoring Core & Stability
 **Goal:** Fix the "God Object" and "Duplicate Code" smells to stabilize the codebase before adding features.
 
-| Task ID | Description | Assigned To | Est. Effort |
-| :--- | :--- | :--- | :--- |
-| **T-1.1** | Create `Patient` and `Appointment` classes to fix Primitive Obsession (US-01). | **Ali Agela** | 2 Days |
-| **T-1.2** | Consolidate duplicate creation/search functions in `app.py` (US-03). | **Ali Agela** | 1 Day |
-| **T-1.3** | Create `ClinicRepository` and move global lists there (US-02). | **Mohamed Ramadan** | 3 Days |
-| **T-1.4** | Setup Trello Board and define Acceptance Criteria for all tasks. | **Mohamed Jamal** | 1 Day |
+| Task ID | Description | Assigned To |
+| :--- | :--- | :--- | 
+| **T-1.1** | Create `Patient` and `Appointment` classes to fix Primitive Obsession (US-01). | **Ali Agela** |
+| **T-1.2** | Consolidate duplicate creation/search functions in `app.py` (US-03). | **Ali Agela** |
+| **T-1.3** | Create `ClinicRepository` and move global lists there (US-02). | **Mohamed Ramadan** |
+| **T-1.4** | Setup Trello Board and define Acceptance Criteria for all tasks. | **Mohamed Jamal** |
 
 ### Sprint 2: Data Integrity & Evolution Features
 **Goal:** Fix data coupling (Shotgun Surgery) and implement the required evolution feature.
 
-| Task ID | Description | Assigned To | Est. Effort |
-| :--- | :--- | :--- | :--- |
-| **T-2.1** | Normalize Appointments: Switch from storing objects to `patient_id` (US-04). | **Ali Agela** | 2 Days |
-| **T-2.2** | Implement "Appointment Search" feature and Unit Tests (US-05). | **Ali Agela** | 3 Days |
-| **T-2.3** | Implement Form Validation & Flash Messages (US-06). | **Mohamed Ramadan** | 2 Days |
-| **T-2.4** | Final Report compilation (`final_doc.md`) and presentation slides. | **Mohamed Ramadan** | 1 Day |
-| **T-2.5** | Final Project Coordination and deliverable review. | **Mohamed Jamal** | 1 Day |
+| Task ID | Description | Assigned To |
+| :--- | :--- | :--- |
+| **T-2.1** | Normalize Appointments: Switch from storing objects to `patient_id` (US-04). | **Ali Agela** |
+| **T-2.2** | Implement "Appointment Search" feature and Unit Tests (US-05). | **Ali Agela** | 
+| **T-2.3** | Implement Form Validation & Flash Messages (US-06). | **Mohamed Ramadan** | 
+| **T-2.4** | Final Report compilation (`final_doc.md`) and presentation slides. | **Mohamed Ramadan** | 
+| **T-2.5** | Final Project Coordination and deliverable review. | **Mohamed Jamal** |
 
 ---
 
