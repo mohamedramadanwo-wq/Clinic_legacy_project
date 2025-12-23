@@ -1,12 +1,20 @@
 # Clinic Legacy App Refactoring Project
 
-**Team:** Nbee_Nt5rj.py
-**Course Project:** Software Maintenance & Evolution
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
+![Flask](https://img.shields.io/badge/Flask-2.0%2B-green)
+![Status](https://img.shields.io/badge/Status-Completed-success)
+![Course](https://img.shields.io/badge/Course-Software%20Maintenance-orange)
+
+
+ **Team:** Nbee_Nt5rj.py
+
+ **Course Project:** Software Maintenance & Evolution
+
 **Status:** Completed (Refactoring & Evolution Phase)
+
 **Timeline:** Dec 6, 2025 – Dec 21, 2025
 
 ---
-
 ## Project Overview
 
 The **Clinic Legacy App** started as a monolithic, fragile Flask application plagued by "Code Smells" such as God Object, Duplicate Code, and Global State.
@@ -31,8 +39,22 @@ Our team performed a comprehensive **Preventive and Perfective Maintenance** cyc
 | **Mohamed Ramadan Alwerfalli** | Documentation Lead | Analysis, Metrics, Architecture Design, Reporting |
 | **Ali Agela** | Lead Developer | Core Refactoring, Features (Search/Validation), Unit Testing |
 
----
 
+## Project Management & Tracking
+
+We utilized Agile methodologies to manage our refactoring sprints and track maintenance metrics.
+
+<a href="https://docs.google.com/spreadsheets/d/1Kw65mfrDgDGqE1oj7E2z3iNykL-wHOvs92Dqa5pMDbM/edit?usp=sharing">
+  <img src="https://www.gstatic.com/images/branding/product/1x/sheets_2020q4_48dp.png" alt="Google Sheets" width="25"> Google Sheets
+</a> 
+
+<br>
+
+<a href="https://trello.com/invite/b/6949d9fe4548f33e578d0933/ATTI49dcb5cf452bb76ca29a93ae57c3cd6c1B406946/my-trello-board">
+  <img src="https://cdn.worldvectorlogo.com/logos/trello.svg" alt="Trello" width="20"> Trelloo Board
+</a> 
+
+---
 ## Architecture Transformation
 
 ### Before (Legacy State)
