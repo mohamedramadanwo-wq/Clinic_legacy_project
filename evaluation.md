@@ -88,7 +88,7 @@ This document compares the codebase metrics before and after refactoring to demo
 | 12 | Operational ease | 2 | **3** *(flash messages)* |
 | 13 | Multiple sites | 0 | 0 |
 | 14 | Facilitate change | 2 | **4** *(separated concerns)* |
-| **Total Degree of Influence (TDI)** | **15** | **23** |
+| **Total Degree of Influence (TDI)** |   | **15** | **23** |
 
 **CFA Calculation:**
 - Formula: CFA = 0.65 + (0.01 × TDI)
@@ -303,12 +303,8 @@ test_repository.py::TestEdgeCases::test_search_with_no_matches_returns_empty PAS
   - Better documented (docstrings)
 
 ### Recommendations for Future Work
-1. ~~Add unit tests using pytest~~ ✅ **Done! (17 tests)**
-2. Move to SQLite/PostgreSQL for persistent storage
-3. Add user authentication
-4. Create a proper CSS file instead of inline styles
+1. Move to SQLite/PostgreSQL for persistent storage
+2. Add user authentication
+3. Create a proper CSS file instead of inline styles
 
 ---
-
-**Evaluation Complete**  
-*The refactoring successfully improved maintainability while preserving all original functionality and adding new features.*
