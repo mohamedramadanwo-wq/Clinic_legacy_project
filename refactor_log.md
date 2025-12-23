@@ -125,7 +125,7 @@ def find_patient(patient_id):
 
 **Date:** 2025-12-10 
 **Commit:** `refactor: Extract ClinicRepository from app.py`  
-**Code Smell Fixed:** God Object / Low Cohesion / Feature Envy
+**Code Smell Fixed:** God Object / Low Cohesion / Feature Envy / Primitive Obsession
 
 ### Problem
 `app.py` was a monolithic "God Object" handling everything:
@@ -158,26 +158,40 @@ def del_patient(pid):
 ```
 
 ### Solution
-Created `repository.py` with `ClinicRepository` class:
+Created `repository.py` with `ClinicRepository` class that uses the domain model classes from Phase 1:
 
 ```python
-# After: Clean separation of concerns
+# After: Clean separation of concerns with proper domain models
+from models import Patient, Appointment
+
 class ClinicRepository:
     def __init__(self):
-        self._patients = []
-        self._appointments = []
+        self._patients = []       # List of Patient objects
+        self._appointments = []   # List of Appointment objects
         self._next_patient_id = 1
     
     def add_patient(self, name, age, phone):
         """Add a new patient and return the patient dict."""
-        patient = {...}
+        patient = Patient(
+            id=self._next_patient_id,
+            name=name,
+            age=age,
+            phone=phone
+        )
         self._patients.append(patient)
-        return patient
+        return patient.to_dict()
+    
+    def _find_patient_obj(self, patient_id):
+        """Internal: Find patient object by ID."""
+        for p in self._patients:
+            if p.id == patient_id:
+                return p
+        return None
     
     def delete_patient(self, patient_id):
         """Delete a patient and their appointments (cascade)."""
-        self._patients = [p for p in self._patients if p['id'] != patient_id]
-        self._appointments = [a for a in self._appointments if a['patient']['id'] != patient_id]
+        self._patients = [p for p in self._patients if p.id != patient_id]
+        self._appointments = [a for a in self._appointments if a.patient_id != patient_id]
 
 # Global instance
 clinic = ClinicRepository()
@@ -196,7 +210,8 @@ def del_patient(pid):
 ### Files Changed
 | File | Change |
 |------|--------|
-| `repository.py` | **NEW** - ClinicRepository class with all data operations |
+| `repository.py` | **NEW** - ClinicRepository class using Patient/Appointment models |
+| `models.py` | Now imported and used by repository |
 | `app.py` | Removed global state, imports and uses `clinic` from repository |
 
 ### LOC Impact
@@ -210,6 +225,8 @@ def del_patient(pid):
 - **Testability:** Can unit test `ClinicRepository` independently
 - **Encapsulation:** Data access controlled through methods
 - **Maintainability:** Changes to data storage only affect `repository.py`
+- **Type Safety:** Uses `Patient` and `Appointment` classes instead of raw dicts
+- **Better Debugging:** Model classes have `__repr__` for clear output
 
 ---
 
