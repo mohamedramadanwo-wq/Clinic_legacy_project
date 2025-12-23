@@ -52,7 +52,7 @@ We have divided the work into two 1-week sprints based on the team's capacity.
 | Member | Role | Responsibilities |
 | :--- | :--- | :--- |
 | **Mohamed Jamal Al Tarhoni** | **Scrum Master** | Responsible for the Trello board management, tracking progress, coordinating the `Plan.md`, and ensuring team deliverables are met on time. |
-| **Mohamed Ramadan Alwerfalli** | **Documentation Lead & Dev** | Responsible for the architectural analysis (`analysis.md`), metrics calculation (`metrics.md`), evaluation overview (`evaluation.md`), final documentation (`final_doc.md`), and the final presentation. Also assists with core refactoring. |
+| **Mohamed Ramadan Alwerfalli** | **Documentation Lead & Dev** | Responsible for the architectural analysis (`analysis.md`), metrics calculation (`metrics.md`), evaluation overview (`evaluation.md`), and the final presentation. Also assists with core refactoring. |
 | **Ali Agela** | **Lead Developer** | Responsible for the heavy lifting of code refactoring (Classes, Repository), implementing the Evolution Features (Search, handling error messages), and writing Unit Tests. |
 
 ---
